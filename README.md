@@ -9,7 +9,7 @@ AuthentiCT requires Python 3.6+ and relies on a number of non-standard libraries
 - pandas (version 0.25.2)
 - scipy (version 1.3.1)
 
-After downloading or cloning this repository, you can install AuthentiCT by typing from the terminal:
+After downloading or cloning this repository, you can install AuthentiCT by typing from the terminal whic should install all necessary dependencies:
 ```
 pip3 install [path to the downloaded repository]
 ```
@@ -52,18 +52,18 @@ Note that AuthentiCT only applies to sequences generated from single-stranded li
 
 Commands:
 =========
-AuthentiCT has 3 sub-commands: deam2cont to estimate contamination, deamination to print C-to-T substitution frequencies, simulation to simulate sequences under the ancient DNA damage model. We describe below the options of each command.
+AuthentiCT has 3 sub-commands: deam2cont to estimate contamination, deamination to print C-to-T substitution frequencies, simulation to simulate sequences under the ancient DNA damage model. We describe the options of each command below.
 
 deam2cont
 ---------
-	-o output file name (by default, it uses the standard output)
-	-t estimates contamination from the frequencies of C-to-T substitutions at the first and last positions of sequences
-	-m mapping quality cutoff
-	-l sequence length cutoff
-	-b base quality cutoff
-	-s maximum number of sequences used to fit the deamination model (the default is 100,000 sequences)
-	-p only keep sequences overlapping provided positions
-	--decoding print the posterior probabilities of each state, line by line for each informative site
+	-o	name of output file (by default, it uses the standard output)
+	-t	estimates contamination from the frequencies of C-to-T substitutions at the first and last positions of sequences
+	-m	mapping quality cutoff
+	-l	sequence length cutoff
+	-b	base quality cutoff
+	-s	maximum number of sequences used to fit the deamination model (the default is 100,000 sequences)
+	-p	only keep sequences overlapping provided positions
+	--decoding	prints the posterior probabilities of each state, line by line for each informative site
 
 Example of a command:
 ```
@@ -71,24 +71,24 @@ AuthentiCT deam2cont -o [output name] -s 10000 [input.sam]
 ```
 or if you have a file in the BAM format:
 ```
-samtools view input.bam \| AuthentiCT deam2cont -o [output name] -s 10000 -
+samtools view input.bam | AuthentiCT deam2cont -o [output name] -s 10000 -
 ```
 
 deamination
 -----------
-	-o output file name (by default, it uses the standard output)
-	-d computes the observed and expected distance between internal C-to-T substitutions and disregard the specified number of positions at both ends of sequences
-	-m mappinq quality cutoff
-	-l sequence length cutoff
-	-b base quality cutoff
+	-o	name of output file (by default, it uses the standard output)
+	-d	computes the observed and expected distance between internal C-to-T substitutions and disregard the specified number of positions at both ends of sequences
+	-m	mappinq quality cutoff
+	-l	sequence length cutoff
+	-b	base quality cutoff
 
 simulation
 ----------
-	-o output file name (by default, it uses the standard output)
-	-N number of simulated sequences
-	-GC proportion of G and C bases in the sequences
-	-L average length of sequences
-	-l minimum length of seauences
+	-o	name of output file (by default, it uses the standard output)
+	-N	number of simulated sequences
+	-GC	proportion of G and C bases in the sequences
+	-L	average length of sequences
+	-l	minimum length of seauences
 
 Outputs:
 ========
@@ -98,13 +98,16 @@ deam2cont
 deam2cont outputs by default a list of the maximum likelihood estimates of the parameter values (2nd column) with their associated standard error (3rd column). 
 It then outputs information about the sequences:
 
-| sequence name | sequence of observations | flag | length | vector of posterior probabilities for the 5' single-stranded state | vector of posterior probabilities for the double-stranded state | vector of posterior probabilities for the single-stranded state | vector of posterior probabilities for the 3' single-stranded state | vector of informative positions in the sequence | probability that the sequence is endogenous | likelihood from the endogenous model | likelihood from the contaminant model | score (likelihood ratio) |
+| sequence name | sequence of observations | flag (0 for forward, 16 for reverse) | sequence length | vector of posterior probabilities for the 5' single-stranded state | vector of posterior probabilities for the double-stranded state | vector of posterior probabilities for the single-stranded state | vector of posterior probabilities for the 3' single-stranded state | vector of informative positions in the sequence | probability that the sequence is endogenous | likelihood from the endogenous model | likelihood from the contaminant model | score (likelihood ratio) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
-
-One can also print the posterior probabilities line by line for each site using the option --decoding.
+One can also print the posterior probabilities line by line for each site using the option --decoding. This will output the position, the length of the sequence, the base at that position, the posterior probabilities of 5’ single-stranded overhang, double-stranded, single-stranded and 3’ single-stranded overhang states, respectively, and, finally, the sequence name.
 
 simulation
 ----------
 The output for this command is in the SAM format. We add a ST field (e.g. ST:Z:555dddddsssdddd3333) that corresponds to the state for each base with 5, d, s and 3 corresponding to the 5’ single-stranded overhang, double-stranded, single-stranded and 3’ single-stranded overhang states, respectively.
 
+citation
+--------
+The method is described in a preprint that will be soon available on bioRxiv.
 
