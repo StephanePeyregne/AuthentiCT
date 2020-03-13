@@ -8,7 +8,15 @@ AuthentiCT requires Python 3.6+ and relies on a number of non-standard libraries
 - numdifftools (version 0.9.39)
 - pandas (version 0.25.2)
 - scipy (version 1.3.1)
-After downloading or cloning this repository, you can install AuthentiCT by typing "pip3 install [path to the downloaded repository]" from the terminal. It should also be installed if you run the setup.py file like so: python3 setup.py install
+
+After downloading or cloning this repository, you can install AuthentiCT by typing from the terminal:
+```
+pip3 install [path to the downloaded repository]
+```
+It should also be installed if you run the setup.py file like so: 
+```
+python3 setup.py install
+```
 The installation AuthentiCT should run on both linux and macOS. If you have any issue with the installation, contact me at: stephane\_peyregne@eva.mpg.de
 
 Inputs:
@@ -16,6 +24,7 @@ Inputs:
 The input file should be in the SAM format. The presence of a MD field for each sequence is necessary to identify substitutions to the reference genome. This MD field should be in the standard format as generated with the samtools calmd command.
 
 You can also provide a configuration file specifying the values of the parameters. This configuration file should list on each line the name and value of a parameter in a tab-separated format. Here is an example:
+```
 e	0.003170
 rss	0.602679
 lo	0.261435
@@ -25,8 +34,19 @@ rds	0.035792
 contam	0.001000
 o	0.637999
 o2	0.477368
+```
 
-Here is what they correspond to: e = error rate, rss = rate of C-to-T substitutions in single-stranded regions, lo = length of single-stranded overhangs, lss = length of internal single-stranded regions, lds = length of double-stranded regions, contam = contamination estiamte, o = the frequency of 5' single-stranded overhangs, o2 is proportional to the frequency of 3' single-stranded overhangs
+Here is what they correspond to:
+```
+e = error rate,
+rss = rate of C-to-T substitutions in single-stranded regions,
+lo = length of single-stranded overhangs,
+lss = length of internal single-stranded regions,
+lds = length of double-stranded regions,
+contam = contamination estiamte,
+o = the frequency of 5' single-stranded overhangs,
+o2 is proportional to the frequency of 3' single-stranded overhangs
+```
 
 Note that AuthentiCT only applies to sequences generated from single-stranded libraries and is not tailored for the more complex deamination patterns of sequences generated from double-stranded libraries. Also, it cannot estimate contamination from samples treated with Uracil-DNA Glycosylase (UDG) or other enzymes that alter the deamination patterns. For the same reason, it is not possible to estimate contamination in a filtered dataset of only deaminated sequences.
 
@@ -46,10 +66,13 @@ deam2cont
 	--decoding print the posterior probabilities of each state, line by line for each informative site
 
 Example of a command:
+```
 AuthentiCT deam2cont -o [output name] -s 10000 [input.sam]
-
+```
 or if you have a file in the BAM format:
+```
 samtools view input.bam \| AuthentiCT deam2cont -o [output name] -s 10000 -
+```
 
 deamination
 -----------
@@ -74,12 +97,14 @@ deam2cont
 ---------
 deam2cont outputs by default a list of the maximum likelihood estimates of the parameter values (2nd column) with their associated standard error (3rd column). 
 It then outputs information about the sequences:
-sequence name | sequence of observations | flag | length | vector of posterior probabilities for the 5' single-stranded state | vector of posterior probabilities for the double-stranded state | vector of posterior probabilities for the single-stranded state | vector of posterior probabilities for the 3' single-stranded state | vector of informative positions in the sequence | probability that the sequence is endogenous | likelihood from the endogenous model | likelihood from the contaminant model | score (likelihood ratio)
+
+| sequence name | sequence of observations | flag | length | vector of posterior probabilities for the 5' single-stranded state | vector of posterior probabilities for the double-stranded state | vector of posterior probabilities for the single-stranded state | vector of posterior probabilities for the 3' single-stranded state | vector of informative positions in the sequence | probability that the sequence is endogenous | likelihood from the endogenous model | likelihood from the contaminant model | score (likelihood ratio) |
+
 
 One can also print the posterior probabilities line by line for each site using the option --decoding.
 
 simulation
 ----------
-The output for this command is in the SAM format. We add a ST field (e.g. ST:Z:555dddddsssdddd3333) that corresponds to the state for each base with 5, d, s and 3 corresponding to the 5’ overhang, double-stranded, single-stranded and 3’overhang states, respectively.
+The output for this command is in the SAM format. We add a ST field (e.g. ST:Z:555dddddsssdddd3333) that corresponds to the state for each base with 5, d, s and 3 corresponding to the 5’ single-stranded overhang, double-stranded, single-stranded and 3’ single-stranded overhang states, respectively.
 
 
