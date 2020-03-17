@@ -9,7 +9,7 @@ AuthentiCT requires Python 3.6+ and relies on a number of non-standard libraries
 - pandas (version 0.25.2)
 - scipy (version 1.3.1)
 
-After downloading or cloning this repository, you can install AuthentiCT by typing from the terminal whic should install all necessary dependencies:
+After downloading or cloning this repository, you can install AuthentiCT by typing from the terminal which should install all necessary dependencies:
 ```
 pip3 install [path to the downloaded repository]
 ```
@@ -43,7 +43,7 @@ rss = rate of C-to-T substitutions in single-stranded regions,
 lo = length of single-stranded overhangs,
 lss = length of internal single-stranded regions,
 lds = length of double-stranded regions,
-contam = contamination estiamte,
+contam = contamination estimate,
 o = the frequency of 5' single-stranded overhangs,
 o2 is proportional to the frequency of 3' single-stranded overhangs
 ```
@@ -109,5 +109,5 @@ The output for this command is in the SAM format. We add a ST field (e.g. ST:Z:5
 
 citation
 --------
-The method is described in a preprint that will be soon available on bioRxiv.
+The method is described in a preprint available on bioRxiv: https://www.biorxiv.org/content/10.1101/2020.03.13.991240v1.
 
