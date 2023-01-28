@@ -40,10 +40,10 @@ Here is what they correspond to:
 ```
 e = error rate,
 rss = rate of C-to-T substitutions in single-stranded regions,
-lo = length of single-stranded overhangs,
-lss = length of internal single-stranded regions,
-lds = length of double-stranded regions,
-contam = contamination estimate,
+lo = parameter of the geometric distribution modeling the length of single-stranded overhangs,
+lss = parameter of the geometric distribution modeling the length of internal single-stranded regions,
+lds = parameter of the geometric distribution modeling the length of double-stranded regions,
+contam = contamination estimate (rate from 0 to 1),
 o = the frequency of 5' single-stranded overhangs,
 o2 is proportional to the frequency of 3' single-stranded overhangs
 ```
@@ -95,7 +95,7 @@ Outputs:
 
 deam2cont
 ---------
-deam2cont outputs by default a list of the maximum likelihood estimates of the parameter values (2nd column) with their associated standard error (3rd column). 
+deam2cont outputs by default a list of the maximum likelihood estimates of the parameter values (2nd column, all between 0 and 1) with their associated standard error (3rd column). 
 It then outputs information about the sequences:
 
 | sequence name | sequence of observations | flag (0 for forward, 16 for reverse) | sequence length | vector of posterior probabilities for the 5' single-stranded state | vector of posterior probabilities for the double-stranded state | vector of posterior probabilities for the single-stranded state | vector of posterior probabilities for the 3' single-stranded state | vector of informative positions in the sequence | probability that the sequence is endogenous | likelihood from the endogenous model | likelihood from the contaminant model | score (likelihood ratio) |
@@ -109,5 +109,5 @@ The output for this command is in the SAM format. We add a ST field (e.g. ST:Z:5
 
 citation
 --------
-The method is described in a preprint available on bioRxiv: https://www.biorxiv.org/content/10.1101/2020.03.13.991240v1.
+The method is described in the following publication in Genome Biology: https://doi.org/10.1186/s13059-020-02123-y.
 
