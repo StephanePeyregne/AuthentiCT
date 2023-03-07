@@ -1,6 +1,8 @@
 from pathlib import PosixPath as Path
 from setuptools import setup, find_packages, Extension
 
+__version__ = '1.0.1'
+
 my_name = Path(__file__).resolve()
 
 here = lambda f: str(my_name.with_name(f))
@@ -10,7 +12,7 @@ with open(here("README.md"), "r") as fh:
 
 setup(
     name='AuthentiCT',
-    version='0.1.0',
+    version=__version__,
     packages=find_packages(),
     url='https://github.com/StephanePeyregne/AuthentiCT',
     license='GPLv3.0',

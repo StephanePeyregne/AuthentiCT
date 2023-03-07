@@ -16,6 +16,8 @@ from .input import *
 from .contamination_est import compute_loglikelihood, format_loglikelihood
 from .simulation import *
 
+from importlib.metadata import version
+
 def probability(x):
     x = float(x)
     if x < 0.0 or x > 1.0:
@@ -45,6 +47,8 @@ def get_configuration():
     parser = ArgumentParser(description='Tools to explore deamination patterns on ancient DNA',
                             formatter_class=RawTextHelpFormatter)
 
+    parser.add_argument('--version', action='version', version=version("AuthentiCT"))
+
     subparsers = parser.add_subparsers(dest='command', help='sub-command help')
 
 
@@ -71,7 +75,7 @@ def get_configuration():
                              "(default: %(default)s)")
 
     parser_inference.add_argument('inputfile', metavar='FILE', type=FileType('r'), nargs=1,
-                        help = "Input BAM file"
+                        help = "Input SAM file"
                                "(use `-` for STDIN)")
 
     parser_inference.add_argument('-p', '--positions', metavar='FILE', type=FileType('r'), nargs=1,
@@ -91,7 +95,7 @@ def get_configuration():
                         formatter_class=RawTextHelpFormatter)
 
     parser_deamination.add_argument('inputfile', metavar='FILE', type=FileType('r'), nargs=1,
-                        help = "Input BAM file"
+                        help = "Input SAM file"
                                "(use `-` for STDIN)")
 
     parser_deamination.add_argument('-o', dest='outputfile', metavar='FILE', type=FileType('w'),
