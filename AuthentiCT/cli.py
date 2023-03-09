@@ -228,6 +228,10 @@ def main():
                         print("It was not possible to compute the standard error for some estimates; perhaps you did not use enough sequences.")
                         with np.errstate(invalid='ignore'):
                             se = np.sqrt(np.diag(np.linalg.inv(hessian_ndt)))
+                    except np.linalg.LinAlgError as err:
+                        if 'Singular matrix' in str(err):
+                            print("It was not possible to compute standard errors (could not invert a singular matrix); there are perhaps not enough C-to-T substitutions in this dataset to make an inference.")
+                            sys.exit(0)
                 results = pd.DataFrame({'parameters':res['x'],'std err':se})
                 results.index=['e','rss','lo','lss','lds','rds','contam','o','o2']
 
