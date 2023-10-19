@@ -9,6 +9,8 @@ import numpy as np
 import numdifftools as ndt
 import pandas as pd
 import random
+import os
+import json
 from scipy.optimize import minimize
 
 
@@ -88,6 +90,10 @@ def get_configuration():
     parser_inference.add_argument('--decoding', action='store_true',
                         help="Print the posterior probabilities of each state, one line per position\n"
                               "(default: False)")
+    
+    parser_inference.add_argument('-j', '--json', action='store_true',
+                    help="Output contamination results as JSON\n"
+                          "(default: False)")
 
 
     parser_deamination = subparsers.add_parser('deamination',
@@ -153,6 +159,9 @@ def get_configuration():
 
 def main():
 
+    with open("test.txt", "w") as test_file:
+        test_file.write("Ici0")
+
     options = get_configuration()
 
     if options.command == "simulation":
@@ -194,10 +203,27 @@ def main():
                 print(list(fragments.keys())[list(fragments.values()).index(0)])
                 print("nodeam:", fragments["nodeam"], "; deam5:", fragments["deam5"], "; deam3:", fragments["deam3"], "; deam53:", fragments["deam53"], sep='\t')
                 return
-            total = fragments["nodeam"] + fragments["deam5"] + fragments["deam3"] + fragments["deam53"]
-            contamination = fragments["nodeam"] / total - fragments["deam5"] * fragments["deam3"] / (fragments["deam53"] * total)
-            print("#contamination_rate\t#nodeam\t#deam5\t#deam3\t#deam53", file=options.outputfile)
-            print(contamination, fragments["nodeam"], fragments["deam5"], fragments["deam3"], fragments["deam53"], sep='\t', file=options.outputfile)
+            else:
+                total = fragments["nodeam"] + fragments["deam5"] + fragments["deam3"] + fragments["deam53"]
+                contamination = fragments["nodeam"] / total - fragments["deam5"] * fragments["deam3"] / (fragments["deam53"] * total)
+
+                if options.json:  # Check if the --json option is set
+                    contamination_results = {
+                        "contamination_rate": contamination,
+                        "nodeam": fragments["nodeam"],
+                        "deam5": fragments["deam5"],
+                        "deam3": fragments["deam3"],
+                        "deam53": fragments["deam53"]
+                    }
+
+                    # Save contamination results as JSON
+                    output_filename = os.path.splitext(options.outputfile.name)[0]  # Get the base filename without the extension
+                    json_filename = f"{output_filename}_contamination_results.json"
+                    with open(json_filename, "w") as json_file:
+                        json.dump(contamination_results, json_file)
+
+                print("#contamination_rate\t#nodeam\t#deam5\t#deam3\t#deam53", file=options.outputfile)
+                print(contamination, fragments["nodeam"], fragments["deam5"], fragments["deam3"], fragments["deam53"], sep='\t', file=options.outputfile)
         else:
             if options.config:
                 param = np.array(read_parameters(options.config[0]))
@@ -245,4 +271,3 @@ def main():
         print("Unrecognized command line argument")
 if __name__ == '__main__':
     main()
-
