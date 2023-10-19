@@ -1,7 +1,14 @@
-from pathlib import PosixPath as Path
+import sys
 from setuptools import setup, find_packages, Extension
 
 __version__ = '1.0.1'
+
+if sys.platform == "win32":
+    from pathlib import WindowsPath as Path
+    sep = "\\"
+else:
+    from pathlib import PosixPath as Path
+    sep = "/"
 
 my_name = Path(__file__).resolve()
 
@@ -25,5 +32,5 @@ setup(
     install_requires=['scipy', 'numpy', 'numdifftools', 'pandas'],
     python_requires='>=3.6',
     entry_points={'console_scripts': ['AuthentiCT=AuthentiCT.cli:main']},
-    ext_modules=[Extension("AuthentiCT.contamination_est", ["AuthentiCT/contamination_est.pyx"], language="c++")]
+    ext_modules=[Extension("AuthentiCT.contamination_est", [f"AuthentiCT{sep}contamination_est.pyx"], language="c++")]
 )
